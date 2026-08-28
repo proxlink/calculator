@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Links</title>
+<style>
+:root{
+  --bg:#f4f4f2;
+  --card:#ffffff;
+  --text:#111214;
+  --muted:#6b6f76;
+  --line:#c9c9c7;
+  --shadow:0 12px 35px rgba(0,0,0,.08);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{background:#ececea}
+body{
+  margin:0; min-height:100vh; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text); background:
+  radial-gradient(circle at 50% 10%, #fff 0, #f7f7f5 38%, #eeeeec 100%);
+}
+.app{
+  width:100%; max-width:560px; min-height:100vh; margin:auto; padding:28px 20px 34px;
+  position:relative; overflow:hidden;
+}
+.top-tools{position:absolute; top:18px; right:18px; z-index:5}
+.icon-btn{
+  width:42px;height:42px;border-radius:50%;border:1px solid #ddd;background:rgba(255,255,255,.82);
+  display:grid;place-items:center;font-size:19px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.08)
+}
+.profile{text-align:center;padding:30px 10px 25px}
+.avatar-wrap{position:relative;width:142px;height:142px;margin:0 auto 22px}
+.avatar{
+  width:142px;height:142px;border-radius:50%;background:#e7e7e4;border:3px solid #171717;
+  overflow:hidden;display:grid;place-items:center;font-size:48px;box-shadow:0 8px 22px rgba(0,0,0,.12)
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar-edit{position:absolute;right:2px;bottom:2px;width:40px;height:40px;border:0;border-radius:50%;background:#111;color:#fff;cursor:pointer;display:none}
+.editing .avatar-edit{display:block}
+.name{font-size:clamp(34px,9vw,54px);line-height:1.02;font-weight:850;letter-spacing:-1.8px;margin:0 0 14px;outline:none}
+.badge{
+  display:inline-block;background:#111;color:#fff;border-radius:999px;padding:9px 22px;
+  font-weight:700;font-size:clamp(15px,4vw,19px);letter-spacing:.5px;outline:none
+}
+.bio{max-width:390px;margin:22px auto 0;color:#333;font-size:18px;line-height:1.55;outline:none}
+.links{display:grid;gap:12px;padding:0 6px}
+.link{
+  width:100%;min-height:70px;background:rgba(255,255,255,.76);border:1.5px solid #1e1e1e;
+  border-radius:20px;text-decoration:none;color:#151515;display:grid;grid-template-columns:54px 1fr 36px;
+  align-items:center;padding:8px 15px;box-shadow:0 8px 20px rgba(0,0,0,.05);
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;position:relative
+}
+.link:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,.11);background:#fff}
+.link-icon{width:42px;height:42px;display:grid;place-items:center;font-size:27px;overflow:hidden;border-radius:10px}
+.link-icon img{width:100%;height:100%;object-fit:contain}
+.link-title{font-size:18px;font-weight:760;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arrow{font-size:36px;font-weight:300;line-height:1}
+.link-controls{display:none;position:absolute;right:46px;top:50%;transform:translateY(-50%);gap:5px}
+.editing .link-controls{display:flex}
+.mini{width:30px;height:30px;border:1px solid #ddd;background:#fff;border-radius:9px;cursor:pointer}
+.editing .link{padding-right:126px}
+.add-link{
+  width:100%;border:1.5px dashed #777;border-radius:18px;background:transparent;padding:17px;
+  font-weight:750;font-size:16px;cursor:pointer;display:none
+}
+.editing .add-link{display:block}
+.socials{display:flex;justify-content:center;gap:20px;margin:32px 0 22px}
+.social{width:52px;height:52px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:14px}
+.quote{text-align:center;font-size:17px;margin:0 0 24px;color:#292929;outline:none}
+.divider{width:120px;height:2px;background:#151515;margin:0 auto 25px;border-radius:5px}
+.footer{text-align:center;color:#777;font-size:14px;outline:none}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:30;padding:12px}
+.modal-backdrop.show{display:flex}
+.modal{width:min(560px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:24px 24px 18px 18px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal h2{margin:0 0 16px}
+.field{display:grid;gap:7px;margin:14px 0}
+.field label{font-size:13px;font-weight:750;color:#555}
+.field input{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;font:inherit}
+.icon-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.pick-icon{border:1px solid #ddd;background:#fafafa;border-radius:12px;padding:12px 5px;font-size:24px;cursor:pointer}
+.modal-actions{display:flex;gap:10px;margin-top:18px}
+.btn{flex:1;border:0;border-radius:13px;padding:14px;font-weight:800;cursor:pointer}
+.primary{background:#111;color:#fff}.secondary{background:#eee;color:#111}.danger{background:#ffe6e6;color:#9b1c1c}
+.settings-section{border-top:1px solid #eee;margin-top:18px;padding-top:16px}
+.small-note{font-size:12px;color:#777;line-height:1.5}
+.drag-handle{cursor:grab}
+[contenteditable="true"]{border-radius:8px}
+[contenteditable="true"]:focus{outline:2px dashed #888;outline-offset:5px}
+.hidden-file{display:none}
+@media(max-width:390px){
+  .app{padding-left:14px;padding-right:14px}
+  .link-title{font-size:16px}.link{grid-template-columns:48px 1fr 30px}.editing .link{padding-right:115px}
+  .profile{padding-top:38px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top-tools"><button class="icon-btn" id="editToggle" title="Edit">⚙</button></div>
+
+  <section class="profile">
+    <div class="avatar-wrap">
+      <div class="avatar" id="avatar"><span>👤</span></div>
+      <button class="avatar-edit" id="avatarEdit">📷</button>
+      <input id="avatarInput" class="hidden-file" type="file" accept="image/*">
+    </div>
+    <h1 class="name editable" id="profileName" data-key="name" contenteditable="false">Aizat Alwie</h1>
+    <div class="badge editable" id="tagline" data-key="tagline" contenteditable="false">Focus • Plan • Execute</div>
+    <p class="bio editable" id="bio" data-key="bio" contenteditable="false">Resource, tools dan perkara yang saya gunakan, bina dan kongsikan.</p>
+  </section>
+
+  <main class="links" id="links"></main>
+  <button class="add-link" id="addLink">＋ Tambah Link Baru</button>
+
+  <div class="socials" id="socials"></div>
+  <p class="quote editable" id="quote" contenteditable="false">Keep moving forward.</p>
+  <div class="divider"></div>
+  <div class="footer editable" id="footer" contenteditable="false">© 2026 Aizat Alwie. All rights reserved.</div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modal">
+    <h2 id="modalTitle">Edit Link</h2>
+    <div class="field"><label>Nama Link</label><input id="linkName"></div>
+    <div class="field"><label>URL</label><input id="linkUrl" placeholder="https://..."></div>
+    <div class="field">
+      <label>Pilih Icon</label>
+      <div class="icon-grid" id="iconGrid"></div>
+    </div>
+    <div class="field">
+      <label>Atau Upload Icon / Logo</label>
+      <input id="iconUpload" type="file" accept="image/*">
+      <div class="small-note">Sesuai untuk logo bisnes seperti Carihouse.my atau projek sendiri.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn secondary" id="cancelModal">Batal</button>
+      <button class="btn primary" id="saveModal">Simpan</button>
+    </div>
+    <button class="btn danger" id="deleteModal" style="width:100%;margin-top:10px">Padam Link</button>
+  </div>
+</div>
+
+<script>
+const ICONS = ['🏠','💼','🛍️','📁','📚','▶️','🎵','💬','📧','🌐','📞','📍','🚗','📊','💰','🔗','⭐','🧰','📝','📷'];
+const DEFAULT = {
+  name:'Aizat Alwie',
+  tagline:'Focus • Plan • Execute',
+  bio:'Resource, tools dan perkara yang saya gunakan, bina dan kongsikan.',
+  quote:'Keep moving forward.',
+  footer:'© 2026 Aizat Alwie. All rights reserved.',
+  avatar:'',
+  links:[
+    {title:'Servis & Produk',url:'#',icon:'🛍️',image:''},
+    {title:'Projek Portfolio',url:'#',icon:'📁',image:''},
+    {title:'Ebook / Guide',url:'#',icon:'📚',image:''},
+    {title:'YouTube Channel',url:'#',icon:'▶️',image:''},
+    {title:'TikTok',url:'#',icon:'🎵',image:''},
+    {title:'WhatsApp',url:'#',icon:'💬',image:''},
+    {title:'Email',url:'mailto:',icon:'📧',image:''}
+  ],
+  socials:[
+    {label:'IG',url:'#'},
+    {label:'f',url:'#'},
+    {label:'X',url:'#'}
+  ]
+};
+let state = JSON.parse(localStorage.getItem('myLinksState') || 'null') || structuredClone(DEFAULT);
+let editing = false;
+let activeIndex = null;
+let selectedIcon = '🔗';
+let uploadedIcon = '';
+
+const $ = s => document.querySelector(s);
+function save(){ localStorage.setItem('myLinksState',JSON.stringify(state)); }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function renderProfile(){
+  $('#profileName').textContent=state.name;
+  $('#tagline').textContent=state.tagline;
+  $('#bio').textContent=state.bio;
+  $('#quote').textContent=state.quote;
+  $('#footer').textContent=state.footer;
+  $('#avatar').innerHTML=state.avatar?`<img src="${state.avatar}" alt="Profile">`:'<span>👤</span>';
+}
+function renderLinks(){
+  $('#links').innerHTML='';
+  state.links.forEach((l,i)=>{
+    const a=document.createElement('a');
+    a.className='link'; a.href=l.url||'#'; a.target=l.url&&l.url.startsWith('http')?'_blank':'_self';
+    a.innerHTML=`
+      <span class="link-icon">${l.image?`<img src="${l.image}" alt="">`:escapeHtml(l.icon||'🔗')}</span>
+      <span class="link-title">${escapeHtml(l.title)}</span>
+      <span class="arrow">›</span>
+      <span class="link-controls">
+        <button class="mini edit-one" data-i="${i}" title="Edit">✎</button>
+        <button class="mini up-one" data-i="${i}" title="Naik">↑</button>
+        <button class="mini down-one" data-i="${i}" title="Turun">↓</button>
+      </span>`;
+    $('#links').appendChild(a);
+  });
+  document.querySelectorAll('.edit-one').forEach(b=>b.onclick=e=>{e.preventDefault();openModal(+b.dataset.i)});
+  document.querySelectorAll('.up-one').forEach(b=>b.onclick=e=>{e.preventDefault();move(+b.dataset.i,-1)});
+  document.querySelectorAll('.down-one').forEach(b=>b.onclick=e=>{e.preventDefault();move(+b.dataset.i,1)});
+}
+function renderSocials(){
+  $('#socials').innerHTML=state.socials.map(s=>`<a class="social" href="${escapeHtml(s.url)}" target="_blank">${escapeHtml(s.label)}</a>`).join('');
+}
+function render(){renderProfile();renderLinks();renderSocials();}
+
+function move(i,d){
+  const j=i+d;if(j<0||j>=state.links.length)return;
+  [state.links[i],state.links[j]]=[state.links[j],state.links[i]];save();renderLinks();
+}
+function setEditing(v){
+  editing=v; $('#app').classList.toggle('editing',v);
+  document.querySelectorAll('.editable').forEach(el=>el.contentEditable=v?'true':'false');
+  $('#editToggle').textContent=v?'✓':'⚙';
+  $('#editToggle').title=v?'Siap':'Edit';
+}
+$('#editToggle').onclick=()=>{
+  setEditing(!editing);
+  if(!editing) save();
+};
+document.querySelectorAll('.editable').forEach(el=>{
+  el.addEventListener('input',()=>{
+    const id=el.id;
+    if(id==='profileName')state.name=el.textContent.trim();
+    else if(id==='tagline')state.tagline=el.textContent.trim();
+    else if(id==='bio')state.bio=el.textContent.trim();
+    else if(id==='quote')state.quote=el.textContent.trim();
+    else if(id==='footer')state.footer=el.textContent.trim();
+    save();
+  });
+});
+
+$('#avatarEdit').onclick=()=>$('#avatarInput').click();
+$('#avatarInput').onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();r.onload=()=>{state.avatar=r.result;save();renderProfile()};r.readAsDataURL(f);
+};
+
+function openModal(index=null){
+  activeIndex=index;
+  uploadedIcon='';
+  const item=index===null?{title:'',url:'',icon:'🔗',image:''}:state.links[index];
+  $('#modalTitle').textContent=index===null?'Tambah Link':'Edit Link';
+  $('#linkName').value=item.title; $('#linkUrl').value=item.url;
+  selectedIcon=item.icon||'🔗'; uploadedIcon=item.image||'';
+  $('#deleteModal').style.display=index===null?'none':'block';
+  $('#iconGrid').innerHTML=ICONS.map(x=>`<button class="pick-icon" data-icon="${x}" style="${x===selectedIcon?'outline:3px solid #111':''}">${x}</button>`).join('');
+  document.querySelectorAll('.pick-icon').forEach(b=>b.onclick=()=>{
+    selectedIcon=b.dataset.icon; uploadedIcon='';
+    document.querySelectorAll('.pick-icon').forEach(x=>x.style.outline='');
+    b.style.outline='3px solid #111';
+  });
+  $('#iconUpload').value='';
+  $('#modalBackdrop').classList.add('show');
+}
+$('#addLink').onclick=()=>openModal(null);
+$('#cancelModal').onclick=()=>$('#modalBackdrop').classList.remove('show');
+$('#iconUpload').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=()=>{uploadedIcon=r.result};r.readAsDataURL(f);
+};
+$('#saveModal').onclick=()=>{
+  const item={
+    title:$('#linkName').value.trim()||'Link Baru',
+    url:$('#linkUrl').value.trim()||'#',
+    icon:selectedIcon,
+    image:uploadedIcon
+  };
+  if(activeIndex===null)state.links.push(item);else state.links[activeIndex]=item;
+  save();renderLinks();$('#modalBackdrop').classList.remove('show');
+};
+$('#deleteModal').onclick=()=>{
+  if(activeIndex!==null){state.links.splice(activeIndex,1);save();renderLinks();$('#modalBackdrop').classList.remove('show')}
+};
+$('#modalBackdrop').onclick=e=>{if(e.target===$('#modalBackdrop'))$('#modalBackdrop').classList.remove('show')};
+
+render();
+</script>
+</body>
+</html>
